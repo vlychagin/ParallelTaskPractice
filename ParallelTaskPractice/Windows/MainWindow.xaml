@@ -30,23 +30,16 @@
                  <MenuItem Header="Выход" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="Задача _1">
-                <MenuItem Header="Скачать через WebClient" 
-                    Command="{Binding DownloadByWebClientCommand}"/>
-                <Separator Padding="5 0"/>
-                <MenuItem Header="Скачать через WebRequest" 
-                    Command="{Binding DownloadByWebRequestCommand}"/>
+                <MenuItem Header="Обработать" 
+                    Command="{Binding Task1Command}"/>
             </MenuItem>
 
             <MenuItem Header="Задача _2">
                 <MenuItem Header="Скачать курс валют" 
                           Command="{Binding DownloadValutesCommand}"/>
                 <Separator Padding="5 0"/>
-                <MenuItem Header="Валюты с курсом в диапазоне значений" 
-                          Command="{Binding ValutesByRangeCommand}"/>
-                <MenuItem Header="Валюта заданной страны" 
-                          Command="{Binding ValuteByCountryCommand}"/>
-                <MenuItem Header="Валюта с заданным наименованием" 
-                          Command="{Binding ValuteByNameCommand}"/>
+                <MenuItem Header="Обработать" 
+                          Command="{Binding Task2Command}"/>
             </MenuItem>
 
             <MenuItem Header="_Справка">
@@ -60,15 +53,9 @@
             <ToolBar FontFamily="Verdana"
                      FontSize="16">
                 <Button Margin="5 0"
-                        Command="{Binding DownloadByWebClientCommand}"
-                        ToolTip="Скачать файл при помощи WebClient">
-                    WebClient
-                </Button>
-
-                <Button Margin="5 0"
-                        Command="{Binding DownloadByWebRequestCommand}"
-                        ToolTip="Скачать файл при помощи WebRequest">
-                    WebRequest
+                        Command="{Binding Task1ClientCommand}"
+                        ToolTip="Параллельная загрузка файлов по заданию 1">
+                    Обработка 1
                 </Button>
 
                 <Separator Margin="10 0"/>
@@ -80,21 +67,9 @@
                 </Button>
 
                 <Button Margin="5 0"
-                        Command="{Binding DownloadValutesCommand}"
-                        ToolTip="Получить курсы валют в заданном диапазоне значений">
-                    Диапазон
-                </Button>
-
-                <Button Margin="5 0"
-                        Command="{Binding ValuteByCountryCommand}"
-                        ToolTip="Получить курс валюты заданной страны">
-                    Страна
-                </Button>
-
-                <Button Margin="5 0"
-                        Command="{Binding ValuteByNameCommand}"
-                        ToolTip="Получить курс валюты заданной страны">
-                    Валюта
+                        Command="{Binding Task2Command}"
+                        ToolTip="Параллельная обработка коллекции из скачанного файла">
+                    Обработка 2
                 </Button>
 
                 <Separator Margin="10 0"/>
