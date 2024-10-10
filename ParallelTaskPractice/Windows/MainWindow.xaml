@@ -1,0 +1,165 @@
+﻿<Window x:Class="ParallelTaskPractice.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+
+        Title="Занятие 10.10.2024 практика на сетевое и системное программирование" 
+        Height="600" 
+        Width="900"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/map.png">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+        
+        <!-- меню приложения -->
+        <Menu Grid.Row="0" 
+              VerticalAlignment="Center" 
+              VerticalContentAlignment="Center"
+              FontFamily="Verdana"
+              FontSize="16"
+              Height="25">
+            <MenuItem Header="Файл">
+                 <MenuItem Header="Выход" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Задача _1">
+                <MenuItem Header="Скачать через WebClient" 
+                    Command="{Binding DownloadByWebClientCommand}"/>
+                <Separator Padding="5 0"/>
+                <MenuItem Header="Скачать через WebRequest" 
+                    Command="{Binding DownloadByWebRequestCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="Задача _2">
+                <MenuItem Header="Скачать курс валют" 
+                          Command="{Binding DownloadValutesCommand}"/>
+                <Separator Padding="5 0"/>
+                <MenuItem Header="Валюты с курсом в диапазоне значений" 
+                          Command="{Binding ValutesByRangeCommand}"/>
+                <MenuItem Header="Валюта заданной страны" 
+                          Command="{Binding ValuteByCountryCommand}"/>
+                <MenuItem Header="Валюта с заданным наименованием" 
+                          Command="{Binding ValuteByNameCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Справка">
+                <MenuItem Header="_О программе..." 
+                          Command="{Binding AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        
+        <!-- панель инструментов приложения -->
+        <ToolBarTray Grid.Row="1">
+            <ToolBar FontFamily="Verdana"
+                     FontSize="16">
+                <Button Margin="5 0"
+                        Command="{Binding DownloadByWebClientCommand}"
+                        ToolTip="Скачать файл при помощи WebClient">
+                    WebClient
+                </Button>
+
+                <Button Margin="5 0"
+                        Command="{Binding DownloadByWebRequestCommand}"
+                        ToolTip="Скачать файл при помощи WebRequest">
+                    WebRequest
+                </Button>
+
+                <Separator Margin="10 0"/>
+
+                <Button Margin="5 0"
+                        Command="{Binding DownloadValutesCommand}"
+                        ToolTip="Скачать текущий курс валют ЦРБ, формат файла JSON">
+                    Курс валют
+                </Button>
+
+                <Button Margin="5 0"
+                        Command="{Binding DownloadValutesCommand}"
+                        ToolTip="Получить курсы валют в заданном диапазоне значений">
+                    Диапазон
+                </Button>
+
+                <Button Margin="5 0"
+                        Command="{Binding ValuteByCountryCommand}"
+                        ToolTip="Получить курс валюты заданной страны">
+                    Страна
+                </Button>
+
+                <Button Margin="5 0"
+                        Command="{Binding ValuteByNameCommand}"
+                        ToolTip="Получить курс валюты заданной страны">
+                    Валюта
+                </Button>
+
+                <Separator Margin="10 0"/>
+
+                <Button Margin="5 0"
+                        Command="{Binding AboutCommand}"
+                        ToolTip="Вывод окна сведений о программе">
+                    О программе
+                </Button>
+
+                <Button Margin="5 0"
+                        Command="{Binding ExitCommand}"
+                        ToolTip="Завершение приложения">
+                    Выход
+                </Button>
+
+            </ToolBar>
+        </ToolBarTray>
+
+        <TabControl Grid.Row="2"  Name="TbcMain">
+
+            <!-- Вывод 1й задачи -->
+            <TabItem BorderThickness="1">
+                <TabItem.Header>
+                    <TextBlock Name="TblTask1Header"
+                               FontWeight="Bold"
+                               FontFamily="Verdana"
+                               FontSize="14">
+                        Задача 1
+                    </TextBlock>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <TextBlock Name="TblResult"
+                               Margin="5" 
+                               FontFamily="Courier New"
+                               FontSize="16">
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Вывод 2й задачи -->
+            <TabItem BorderThickness="1">
+                <TabItem.Header>
+                    <TextBlock Name="TblTask2Header"
+                               FontFamily="Verdana"
+                               FontSize="14">
+                        Задача 2
+                    </TextBlock>
+                </TabItem.Header>
+                <DataGrid Name="DtgValutes"
+                          Margin="5" 
+                          FontFamily="Verdana"
+                          FontSize="16"
+                          BorderThickness="0.8">
+                </DataGrid>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- строка состояния приложения -->
+        <StatusBar Grid.Row="3">
+            <TextBlock Name="TblStatus"
+                       FontFamily="Verdana"
+                       Padding="5"
+                       FontSize="14"/>
+        </StatusBar>
+    </Grid>
+</Window>
