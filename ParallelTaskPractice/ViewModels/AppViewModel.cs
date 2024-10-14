@@ -24,6 +24,9 @@ public partial class AppViewModel: INotifyPropertyChanged
     // Скачать курс валют с сайта ЦРБ
     public RelayCommand DownloadValutesCommand { get; set; }
 
+    // параллельная обработка по задаче 2
+    public RelayCommand Task2Command { get; set; }
+
     // О приложении
     public RelayCommand AboutCommand { get; set; }
 
@@ -40,6 +43,9 @@ public partial class AppViewModel: INotifyPropertyChanged
 
         // Скачать курс валют с сайта ЦРБ
         DownloadValutesCommand = new(DownloadValutesExec);
+
+        // Параллельная обработка по задаче 2
+        Task2Command = new(Task2CommandExec);
 
         // Показать окно сведений о программе
         AboutCommand = new(o => { });

@@ -37,8 +37,10 @@
             <MenuItem Header="Задача _2">
                 <MenuItem Header="Скачать курс валют" 
                           Command="{Binding DownloadValutesCommand}"/>
-                <Separator Padding="5 0"/>
-                <MenuItem Header="Обработать" 
+                
+				<Separator Padding="5 0"/>
+                
+				<MenuItem Header="Обработать" 
                           Command="{Binding Task2Command}"/>
             </MenuItem>
 
@@ -110,20 +112,75 @@
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Вывод 2й задачи -->
+            <!-- Вывод 2й задачи - скачанная коллекция -->
             <TabItem BorderThickness="1">
                 <TabItem.Header>
                     <TextBlock Name="TblTask2Header"
                                FontFamily="Verdana"
                                FontSize="14">
-                        Задача 2
+                        Задача 2 - исходная коллекция
                     </TextBlock>
                 </TabItem.Header>
                 <DataGrid Name="DtgValutes"
                           Margin="5" 
                           FontFamily="Verdana"
                           FontSize="16"
-                          BorderThickness="0.8">
+                          BorderThickness="0.8"
+                          IsReadOnly="True">
+                </DataGrid>
+            </TabItem>
+
+            <!-- Вывод 2й задачи - выборка из скачанной коллекции -->
+            <TabItem BorderThickness="1">
+                <TabItem.Header>
+                    <TextBlock Name="TblTask2HeaderFilter"
+                               FontFamily="Verdana"
+                               FontSize="14">
+                        Задача 2 - отбор
+                    </TextBlock>
+                </TabItem.Header>
+                <DataGrid Name="DtgValutesFiltered"
+                          Margin="5" 
+                          FontFamily="Verdana"
+                          FontSize="16"
+                          BorderThickness="0.8"
+                          IsReadOnly="True">
+                </DataGrid>
+            </TabItem>
+
+            <!-- Вывод 2й задачи - сортировка копии скачанной коллекции по убыванию курса -->
+            <TabItem BorderThickness="1">
+                <TabItem.Header>
+                    <TextBlock Name="TblTask2HeaderOrderByValueDesc"
+                               FontFamily="Verdana"
+                               FontSize="14">
+                        Задача 2 - сортировка по убыванию курса
+                    </TextBlock>
+                </TabItem.Header>
+                <DataGrid Name="DtgValutesOrderByValueDesc"
+                          Margin="5" 
+                          FontFamily="Verdana"
+                          FontSize="16"
+                          BorderThickness="0.8"
+                          IsReadOnly="True">
+                </DataGrid>
+            </TabItem>
+
+            <!-- Вывод 2й задачи - сортировка копии скачанной коллекции по названию валют -->
+            <TabItem BorderThickness="1">
+                <TabItem.Header>
+                    <TextBlock Name="TblTask2HeaderOrderByName"
+                               FontFamily="Verdana"
+                               FontSize="14">
+                        Задача 2 - сортировка по названию валют
+                    </TextBlock>
+                </TabItem.Header>
+                <DataGrid Name="DtgValutesOrderByName"
+                          Margin="5" 
+                          FontFamily="Verdana"
+                          FontSize="16"
+                          BorderThickness="0.8"
+                          IsReadOnly="True">
                 </DataGrid>
             </TabItem>
 

@@ -2,7 +2,10 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
+using Newtonsoft.Json;
 using ParallelTaskPractice.Models;
 
 namespace ParallelTaskPractice.ViewModels;
@@ -108,8 +111,128 @@ public partial class AppViewModel
 
         HostWindow.TblStatus.Text = $"Загружен курс валют ЦРБ, файл {path}";
         HostWindow.TbcMain.SelectedIndex = 1;
-        HostWindow.TblTask1Header.FontWeight = FontWeights.Normal;
+        
         HostWindow.TblTask2Header.FontWeight = FontWeights.Bold;
+        HostWindow.TblTask1Header.FontWeight = 
+        HostWindow.TblTask2HeaderFilter.FontWeight = 
+        HostWindow.TblTask2HeaderOrderByValueDesc.FontWeight =
+        HostWindow.TblTask2HeaderOrderByName.FontWeight = FontWeights.Normal;
+
         HostWindow.DtgValutes.ItemsSource = new ObservableCollection<Valute>(Valutes);
     } // DownloadValutesExec
-} // class AppViewModel
+
+    private void Task2CommandExec(object o) {
+        Task<List<Valute>> taskFilter = new Task<List<Valute>>(Filter);
+        taskFilter.ContinueWith(ShowFiltered);
+
+        Task<List<Valute>> taskOrderByValueDesc = new Task<List<Valute>>(OrderByValueDesc);
+        taskOrderByValueDesc.ContinueWith(ShowOrderedByValueDesc);
+
+        Task<List<Valute>> taskOrderByName = new Task<List<Valute>>(OrderByName);
+        taskOrderByName.ContinueWith(ShowOrderedByName);
+
+        Parallel.Invoke(
+            () => taskFilter.Start(),
+            () => taskOrderByValueDesc.Start(),
+            () => taskOrderByName.Start()
+        );
+    } // Task2CommandExec
+
+    #region Методы для запуска в задачах
+
+    // получить копию коллекции из файла fileName
+    private List<Valute> GetValutesCopy(string fileName) {
+        var path = $"../../../App_Data/{fileName}";
+        if (!File.Exists(path)) {
+            throw new FileNotFoundException($"Нет файла {path}, повторите загрузку с ЦРБ");
+        } // if
+
+        Task.Delay(3_000).Wait(3_000);
+
+        var json = File.ReadAllText(path);
+        return JsonConvert.DeserializeObject<ValuteApi>(json)!.Valutes.Values.ToList();
+    } // GetValutesCopy
+
+    // В копии коллекции найти и отобразить валюты, курс которых выроc
+    private List<Valute> Filter() => GetValutesCopy("daily_json.json")
+        // .Where(v => v.Previous < v.Value)
+        // для проверки выбеорем валюты с курсом в интервале [50, 60]
+        .Where(v => 50 <= v.Value && v.Value <= 60)
+        .OrderBy(v => v.CharCode)
+        .ToList();
+
+    // Упорядочить копию коллекции валют по убыванию значений курса
+    private List<Valute> OrderByValueDesc() => GetValutesCopy("daily_json.json")
+        .OrderByDescending(v => v.Value)
+        .ToList();
+
+    // Упорядочить копию коллекции валют по названиям
+    private List<Valute> OrderByName() => GetValutesCopy("daily_json.json")
+        .OrderBy(v => v.Name)
+        .ToList();
+    #endregion
+
+    #region Задачи продолжения для вывода результатов
+
+    // вывод отобранных валют в DataGrid DtgValutesFiltered
+    private void ShowFiltered(Task<List<Valute>> task) {
+        List<Valute> valutes = task.Result;
+
+        HostWindow.Dispatcher.Invoke(
+            () => {
+                HostWindow.TbcMain.SelectedIndex = 2;
+
+                HostWindow.TblTask2HeaderFilter.FontWeight = FontWeights.Bold;
+
+                HostWindow.TblTask1Header.FontWeight = 
+                HostWindow.TblTask2Header.FontWeight = 
+                HostWindow.TblTask2HeaderOrderByValueDesc.FontWeight = 
+                HostWindow.TblTask2HeaderOrderByName.FontWeight = FontWeights.Normal;
+
+                HostWindow.DtgValutesFiltered.ItemsSource = new ObservableCollection<Valute>(valutes);
+            }, 
+            DispatcherPriority.Normal
+        );
+    }
+
+    private void ShowOrderedByValueDesc(Task<List<Valute>> task) {
+        List<Valute> valutes = task.Result;
+
+        HostWindow.Dispatcher.Invoke(
+            () => {
+                HostWindow.TbcMain.SelectedIndex = 3;
+
+                HostWindow.TblTask2HeaderOrderByValueDesc.FontWeight = FontWeights.Bold;
+
+                HostWindow.TblTask1Header.FontWeight = 
+                HostWindow.TblTask2Header.FontWeight =
+                HostWindow.TblTask2HeaderFilter.FontWeight =
+                HostWindow.TblTask2HeaderOrderByName.FontWeight = FontWeights.Normal;
+
+                HostWindow.DtgValutesOrderByValueDesc.ItemsSource = new ObservableCollection<Valute>(valutes);
+            },
+            DispatcherPriority.Normal
+        );
+    }
+
+    private void ShowOrderedByName(Task<List<Valute>> task) {
+        List<Valute> valutes = task.Result;
+
+        HostWindow.Dispatcher.Invoke(
+            () => {
+                HostWindow.TbcMain.SelectedIndex = 3;
+
+                HostWindow.TblTask2HeaderOrderByName.FontWeight = FontWeights.Bold;
+
+                HostWindow.TblTask1Header.FontWeight =
+                HostWindow.TblTask2Header.FontWeight =
+                HostWindow.TblTask2HeaderFilter.FontWeight =
+                HostWindow.TblTask2HeaderOrderByValueDesc.FontWeight = FontWeights.Normal;
+
+                HostWindow.DtgValutesOrderByName.ItemsSource = new ObservableCollection<Valute>(valutes);
+            },
+            DispatcherPriority.Normal
+        );
+    }
+    #endregion
+} // class AppViewModel 
